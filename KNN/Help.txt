@@ -1,0 +1,17 @@
+Matplotlib 里的常用类的包含关系为 Figure -> Axes -> (Line2D, Text, etc.)
+
+import matplotlib.pyplot as plt
+fig=plt.figure()      						 创建一个figure图表对象fig
+
+subplot(numRows, numCols, plotNum)			 图表的整个绘图区域被分成 numRows 行和 numCols 列，plotNum指格数
+
+ax1=fig.add_subplot(221)  					 在图表fig中添加子图表到2*2格的第一格
+ax1.plot(x,y)								 根据x，y值绘制线性图表
+ax.scatter()
+plt.sc
+plt.show()   								 显示所有图表
+
+
+
+ord() ascll转int
+chr() int转ascll
