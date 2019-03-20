@@ -17,7 +17,7 @@ BATCH_SIZE = 100
 LEARNING_RATE_BASE = 0.02  
 LEARNING_RATE_DECAY = 0.99   
 REGULARIZATION_RATE= 0.0001   
-TRAINING_STEPS = 3000    
+TRAINING_STEPS = 1000
 MOVING_AVERAGE_DECAY = 0.99   
  
 #模型保存路径及文件名
@@ -52,9 +52,11 @@ def train(mnist):
 #运算图控制，用train_op作集合  
     with tf.control_dependencies([train_step, variables_averages_op]):  
         train_op = tf.no_op(name='train')  
- 
+
 #持久化
-    saver = tf.train.Saver()  
+    saver = tf.train.Saver()
+#tf.equal(A, B)是对比这两个矩阵或者向量的相等的元素，如果是相等的那就返回True，反正返回False
+#
     correct_prediction=tf.equal(tf.argmax(y,1),tf.argmax(y_,1))
     accuracy=tf.reduce_mean(tf.cast(correct_prediction,tf.float32))
     
@@ -72,13 +74,15 @@ def train(mnist):
             validate_acc=sess.run(accuracy,feed_dict=value_feed)
             print("After %d train steps, validate accuracy using average model is %g"%(i,validate_acc))   
             print("After %d training step(s), loss on training batch is %g " %(step, loss_value)) 
-            if i%1000 == 0:  
-                 
+            if i%200 == 0:
+                #将y加入集合，方便加载模型时调用，必须放在这里才能保存最后的y值
+                tf.add_to_collection("pred_network", y)
                 saver.save(sess, "./model/model.ckpt")
 
   
-def main(argv=None):  
-    mnist = input_data.read_data_sets("I:\python_project\MINST\mnist_dataset", one_hot=True)  
+def main(argv=None):
+    # print(os.getcwd()+"\\MNIST")
+    mnist = input_data.read_data_sets("E:\python_project\MachineLearning\RE_CNN\MNIST", one_hot=True)
     train(mnist)  
   
 if __name__== '__main__':  
